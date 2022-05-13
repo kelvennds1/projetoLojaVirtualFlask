@@ -3,7 +3,7 @@ from turtle import title
 from flask import render_template, session, request, redirect, url_for, flash
 
 from store import app, db, bcrypt
-from .forms import RegistrationForm
+from .forms import LoginForm, RegistrationForm
 from .models import User    
 import os
 
@@ -23,8 +23,16 @@ def register():
                     password = hash_password)
         db.session.add(user)
         db.session.commit()
-        flash(f'{form.name.data} o registro efetuado com sucesso. Obrigado!', 'success')
+        flash(f'{form.name.data} o registro foi efetuado com sucesso. Obrigado!', 'success')
         return redirect(url_for('home'))
     return render_template('admin/register.html', form=form, title="Pagina de registro")
 
+#Form Login
 
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    form = LoginForm(request.form)
+    if request.method == "POST" and form.validate():
+        user= User.query.filter_by(email=form.email.data).first()
+    form = LoginForm(request.form)
+    return render_template('admin/login.html', form = form, title = 'Pagina de Login')
