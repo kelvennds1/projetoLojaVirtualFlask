@@ -10,7 +10,7 @@ import os
 #Index
 @app.route('/home')
 def home():
-    return "Seja bem vindo!"
+    return render_template('admin/index.html', title = 'Pagina Administrativa')
 
 #Form Register
 @app.route('/register', methods=['GET', 'POST'])
@@ -22,7 +22,8 @@ def register():
         user = User(name = form.name.data, username = form.username.data, email = form.email.data,
                     password = hash_password)
         db.session.add(user)
-        flash('Registro efetuado com sucesso. Obrigado!')
+        db.session.commit()
+        flash(f'{form.name.data} o registro efetuado com sucesso. Obrigado!', 'success')
         return redirect(url_for('home'))
     return render_template('admin/register.html', form=form, title="Pagina de registro")
 
