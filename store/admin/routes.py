@@ -7,9 +7,11 @@ from .forms import LoginForm, RegistrationForm
 from .models import User    
 import os
 
-#Index
-@app.route('/home')
-def home():
+#Admin page
+@app.route('/admin')
+def admin():
+    if 'email' not in session:
+        return redirect(url_for('login'))
     return render_template('admin/index.html', title = 'Pagina Administrativa')
 
 #Form Register
@@ -24,7 +26,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f'{form.name.data} o registro foi efetuado com sucesso. Obrigado!', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     return render_template('admin/register.html', form=form, title="Pagina de registro")
 
 #Form Login
@@ -34,5 +36,11 @@ def login():
     form = LoginForm(request.form)
     if request.method == "POST" and form.validate():
         user= User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            session['email'] = form.email.data
+            flash(f'{form.email.data} o login foi efetuado com sucesso. Obrigado!', 'success')
+            return redirect(request.args.get('next')or url_for('admin'))
+        else:
+            flash(f'Usuario ou Senha incorretos', 'danger')
     form = LoginForm(request.form)
     return render_template('admin/login.html', form = form, title = 'Pagina de Login')
