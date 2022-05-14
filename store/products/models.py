@@ -1,4 +1,5 @@
 from store import db
+from datetime import datetime
 
 
 class Marcas(db.Model):
