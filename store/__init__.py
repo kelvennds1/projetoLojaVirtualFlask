@@ -13,3 +13,4 @@ bcrypt = Bcrypt(app)
 
 #Import routes
 from store.admin import routes
+from store.products import routes
