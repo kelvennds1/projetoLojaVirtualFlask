@@ -1,7 +1,7 @@
 from ast import Add
 from flask import redirect, render_template, url_for, flash, request
 from .forms import Addprodutos
-from store import db, app
+from store import db, app, photos
 from store.products.models import Marcas, Categorias
 
 @app.route('/addmarca', methods=['GET', 'POST'])
@@ -28,10 +28,13 @@ def addcat():
     return render_template('products/addmarca.html')
 
 
-@app.route('/addproduto', methods=['GET', 'POST'])
+@app.route('/addproduto')
 def addproduto():
     marcas = Marcas.query.all()
     categorias = Categorias.query.all()
     form = Addprodutos(request.form)
-
+    if request.method=="POST":
+        photos.save(request.files.get('image_1'))
+        photos.save(request.files.get('image_2'))
+        photos.save(request.files.get('image_3'))    
     return render_template('products/addproduto.html', title= "Cadastrar Produtos", form=form, marcas=marcas, categorias=categorias)
