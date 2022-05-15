@@ -1,13 +1,17 @@
 from ast import Add
 import secrets
 from turtle import color, title
-from flask import redirect, render_template, url_for, flash, request
+from flask import redirect, render_template, url_for, flash, request, session
 from .forms import Addprodutos
 from store import db, app, photos
 from store.products.models import Marca, Categoria, Addproduto
 
 @app.route('/addmarca', methods=['GET', 'POST'])
 def addmarca():
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+  
     if request.method == "POST":
         getmarca = request.form.get('marca')
         marca = Marca(name=getmarca)
@@ -20,6 +24,10 @@ def addmarca():
 
 @app.route('/addcat', methods=['GET', 'POST'])
 def addcat():
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+
     if request.method == "POST":
         getcat = request.form.get('categoria')
         cat = Categoria(name=getcat)
@@ -31,6 +39,10 @@ def addcat():
 
 @app.route('/addproduto', methods=['GET', 'POST'])
 def addproduto():
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+
     marcas = Marca.query.all()
     categorias = Categoria.query.all()
     form = Addprodutos(request.form)

@@ -1,7 +1,7 @@
 import email
 from turtle import title
 from flask import render_template, session, request, redirect, url_for, flash
-
+from store.products.models import Addproduto
 from store import app, db, bcrypt
 from .forms import LoginForm, RegistrationForm
 from .models import User    
@@ -11,8 +11,11 @@ import os
 @app.route('/admin')
 def admin():
     if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
         return redirect(url_for('login'))
-    return render_template('admin/index.html', title = 'Pagina Administrativa')
+    produtos = Addproduto.query.all()
+
+    return render_template('admin/index.html', title = 'Pagina Administrativa', produtos = produtos)
 
 #Form Register
 @app.route('/register', methods=['GET', 'POST'])
