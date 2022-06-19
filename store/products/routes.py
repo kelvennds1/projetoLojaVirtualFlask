@@ -1,4 +1,5 @@
 import secrets
+from turtle import title
 from flask import redirect, render_template, url_for, flash, request, session
 from .forms import Addprodutos
 from store import db, app, photos
@@ -66,4 +67,35 @@ def addproduto():
         return redirect(url_for('admin'))
     return render_template('products/addproduto.html', title="Cadastrar Produtos", form=form, marcas=marcas, categorias=categorias)
 
+@app.route('/updatemarca/<int:id>', methods=['GET', 'POST'])
+def updatemarca(id):
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+    updatemarca = Marca.query.get_or_404(id)
+    marca = request.form.get('marca')
+
+    if request.method == 'POST':
+        updatemarca.name = marca
+        flash(f'Seu Fabricante foi atualizada com sucesso!', 'success')
+        db.session.commit()
+        return redirect(url_for('marcas'))
+
+    return render_template('products/updatemarca.html', title='Atualizar Fabricantes', updatemarca=updatemarca)
+
+@app.route('/updatecat/<int:id>', methods=['GET', 'POST'])
+def updatecat(id):
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+    updatecat = Categoria.query.get_or_404(id)
+    categoria = request.form.get('categoria')
+
+    if request.method == 'POST':
+        updatecat.name = categoria
+        flash(f'Sua Categoria foi atualizada com sucesso!', 'success')
+        db.session.commit()
+        return redirect(url_for('categoria'))
+
+    return render_template('products/updatemarca.html', title='Atualizar Categoria', updatecat=updatecat)
 
