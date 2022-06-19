@@ -114,6 +114,21 @@ def deletemarca(id):
     flash(f'A marca {marca.name} não foi deletada com sucesso!', 'success')
     return redirect(url_for('marcas'))
 
+@app.route('/deletecategoria/<int:id>', methods=['POST'])
+def deletecategoria(id):
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+    
+    categoria = Categoria.query.get_or_404(id)
+    if request.method == "POST":
+        db.session.delete(categoria)
+        db.session.commit()
+        flash(f'A marca {categoria.name} foi deletada com sucesso!', 'success')
+        return redirect(url_for('marcas'))
+    flash(f'A marca {categoria.name} não foi deletada com sucesso!', 'success')
+    return redirect(url_for('categoria'))
+
 @app.route('/updateproduto/<int:id>', methods=['GET', 'POST'])
 def updateproduto(id):
     if 'email' not in session:

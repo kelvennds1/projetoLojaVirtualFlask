@@ -96,8 +96,33 @@
                 <td>{{categoria.name}}</td>
 
                 <td><a href="{{url_for('updatecat', id=categoria.id)}}" class="btn btn-sm btn-outline-success">Editar</a></td>
-                <td><a href="" class="btn btn-sm btn-outline-warning">Deletar</a></td>
-            </tr>
+                <td>
+                  <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal-{{categoria.id}}">
+                    Deletar
+                  </button>
+                </td>
+              </td>
+          </tr>
+          <div class="modal fade" id="exampleModal-{{categoria.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">{{categoria.name}}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <span class="text-danger">Deseja realmente deletar a(o) categoria {{categoria.name}}?</span>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Voltar</button>
+                  <form action="{{url_for('deletecategoria', id=categoria.id)}}" method="POST">
+                    <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+                  </form>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
             {% endfor %}
 
             {% endif %}
