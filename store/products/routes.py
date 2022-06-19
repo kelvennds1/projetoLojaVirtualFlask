@@ -1,6 +1,6 @@
-import secrets
+import secrets, os
 from turtle import title
-from flask import redirect, render_template, url_for, flash, request, session
+from flask import current_app, redirect, render_template, url_for, flash, request, session
 from .forms import Addprodutos
 from store import db, app, photos
 from store.products.models import Marca, Categoria, Addproduto
@@ -99,3 +99,59 @@ def updatecat(id):
 
     return render_template('products/updatemarca.html', title='Atualizar Categoria', updatecat=updatecat)
 
+@app.route('/updateproduto/<int:id>', methods=['GET', 'POST'])
+def updateproduto(id):
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+    marcas = Marca.query.all()
+    categorias = Categoria.query.all()
+    produto = Addproduto.query.get_or_404(id)
+    marca = request.form.get('marca')
+    categoria = request.form.get('categoria')
+    form = Addprodutos(request.form)
+    if request.method=="POST":
+        produto.name = form.name.data
+        produto.price = int(form.price.data)
+        produto.discount = form.discount.data
+        produto.marca_id = marca
+       
+        produto.categoria_id = categoria 
+        produto.stock = form.stock.data 
+        produto.colors = form.colors.data 
+        produto.desc  = form.discription.data
+
+        if request.files.get('image_1'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + produto.image_1))
+                produto.image_1 = photos.save(request.files.get('image_1'),name=secrets.token_hex(10)+".")
+            except:
+                produto.image_1 = photos.save(request.files.get('image_1'),name=secrets.token_hex(10)+".")
+
+        if request.files.get('image_2'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + produto.image_2))
+                produto.image_2 = photos.save(request.files.get('image_1'),name=secrets.token_hex(10)+".")
+            except:
+                produto.image_2 = photos.save(request.files.get('image_1'),name=secrets.token_hex(10)+".")
+        
+        if request.files.get('image_3'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + produto.image_3))
+                produto.image_3 = photos.save(request.files.get('image_3'),name=secrets.token_hex(10)+".")
+            except:
+                produto.image_3 = photos.save(request.files.get('image_3'),name=secrets.token_hex(10)+".")
+
+
+        db.session.commit()
+        flash(f'O Produto foi atualizado com sucesso', 'success')
+        return redirect ('/admin')
+
+    form.name.data = produto.name
+    form.price.data = produto.price
+    form.discount.data = produto.discount
+    form.stock.data = produto.stock
+    form.colors.data = produto.colors
+    form.discription.data = produto.desc
+
+    return render_template('products/updateproduto.html', title='Atualizar Produto', form=form, updateproduto=updateproduto, marcas=marcas, categorias=categorias, produto=produto)
