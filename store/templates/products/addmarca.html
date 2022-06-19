@@ -14,11 +14,14 @@
                 <input type="submit" value="Cadastrar" class="btn btn-success mt-2">
                 
             </form>
+            <a href="{{url_for('marcas')}}" class="btn btn-danger" style="margin-top: -66px; margin-left: 100px;">Voltar</a> 
             {% else %}
             <h2 class="text-center mt-5">Cadastrar Categorias</h2>
             <form action=""  method="POST">
                 <input type="text" name="categoria" class="form-control">
                 <input type="submit" value="Cadastrar" class="btn btn-success mt-2">
+            </form>
+            <a href="{{url_for('categoria')}}" class="btn btn-danger" style="margin-top: -66px; margin-left: 100px;">Voltar</a> 
             {% endif %}   
         </div>
         <div class="col-md-3"></div>

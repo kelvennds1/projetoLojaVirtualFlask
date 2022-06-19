@@ -99,6 +99,21 @@ def updatecat(id):
 
     return render_template('products/updatemarca.html', title='Atualizar Categoria', updatecat=updatecat)
 
+@app.route('/deletemarca/<int:id>', methods=['POST'])
+def deletemarca(id):
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+    
+    marca = Marca.query.get_or_404(id)
+    if request.method == "POST":
+        db.session.delete(marca)
+        db.session.commit()
+        flash(f'A marca {marca.name} foi deletada com sucesso!', 'success')
+        return redirect(url_for('marcas'))
+    flash(f'A marca {marca.name} não foi deletada com sucesso!', 'success')
+    return redirect(url_for('marcas'))
+
 @app.route('/updateproduto/<int:id>', methods=['GET', 'POST'])
 def updateproduto(id):
     if 'email' not in session:
