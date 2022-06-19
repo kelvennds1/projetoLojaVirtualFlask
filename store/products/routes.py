@@ -1,6 +1,4 @@
-from ast import Add
 import secrets
-from turtle import color, title
 from flask import redirect, render_template, url_for, flash, request, session
 from .forms import Addprodutos
 from store import db, app, photos

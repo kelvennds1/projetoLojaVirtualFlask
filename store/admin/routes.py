@@ -1,7 +1,7 @@
 import email
 from turtle import title
 from flask import render_template, session, request, redirect, url_for, flash
-from store.products.models import Addproduto
+from store.products.models import Addproduto, Marca, Categoria
 from store import app, db, bcrypt
 from .forms import LoginForm, RegistrationForm
 from .models import User    
@@ -16,6 +16,23 @@ def admin():
     produtos = Addproduto.query.all()
 
     return render_template('admin/index.html', title = 'Pagina Administrativa', produtos = produtos)
+
+@app.route('/marcas')
+def marcas():
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+    marcas = Marca.query.order_by(Marca.id.desc()).all()
+    return render_template('admin/marcas.html', title = 'Página de Fabricantes', marcas = marcas)
+
+@app.route('/categoria')
+def categoria():
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+    categorias = Categoria.query.order_by(Categoria.id.desc()).all()
+    return render_template('admin/marcas.html', title = 'Página de Categorias', categorias = categorias)
+
 
 #Form Register
 @app.route('/register', methods=['GET', 'POST'])

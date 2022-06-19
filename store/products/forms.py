@@ -9,7 +9,7 @@ class Addprodutos(Form):
     discription = TextAreaField('Descrição: ' , [validators.DataRequired()])
     colors = TextAreaField('Cor: ' , [validators.DataRequired()])
     
-    image_1 = FileField('Image 1: ' , validators=[FileRequired(),FileAllowed(['jpg', 'png', 'gif', 'jpeg'])])
-    image_2 = FileField('Image 2: ' , validators=[FileRequired(),FileAllowed(['jpg', 'png', 'gif', 'jpeg'])])
-    image_3 = FileField('Image 3: ' , validators=[FileRequired(),FileAllowed(['jpg', 'png', 'gif', 'jpeg'])])
+    image_1 = FileField('Image 1: ' , validators=[FileRequired(),FileAllowed(['jpg', 'png', 'gif', 'jfif', 'jpeg'])])
+    image_2 = FileField('Image 2: ' , validators=[FileRequired(),FileAllowed(['jpg', 'png', 'gif', 'jfif', 'jpeg'])])
+    image_3 = FileField('Image 3: ' , validators=[FileRequired(),FileAllowed(['jpg', 'png', 'gif', 'jfif', 'jpeg'])])
   
