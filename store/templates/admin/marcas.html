@@ -78,9 +78,9 @@
                     <span class="text-danger">Deseja realmente deletar a(o) Fabricante {{marca.name}}?</span>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Voltar</button>
                     <form action="{{url_for('deletemarca', id=marca.id)}}" method="POST">
-                      <button type="submit" class="btn btn-danger">Deletar</button>
+                      <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
                     </form>
                     
                   </div>
