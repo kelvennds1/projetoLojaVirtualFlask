@@ -185,3 +185,26 @@ def updateproduto(id):
     form.discription.data = produto.desc
 
     return render_template('products/updateproduto.html', title='Atualizar Produto', form=form, updateproduto=updateproduto, marcas=marcas, categorias=categorias, produto=produto)
+
+@app.route('/deleteproduto/<int:id>', methods=['POST'])
+def deleteproduto(id):
+    if 'email' not in session:
+        flash(f'Por favor fazer login!', 'success')
+        return redirect(url_for('login'))
+    
+    produto = Addproduto.query.get_or_404(id)
+    if request.method == "POST":
+        #try:
+        os.unlink(os.path.join(current_app.root_path,"static/images/"+produto.image_1))
+        os.unlink(os.path.join(current_app.root_path,"static/images/"+produto.image_2))
+        os.unlink(os.path.join(current_app.root_path,"static/images/"+produto.image_3))
+        #except Exception as e:
+        #    print(e)
+        db.session.delete(produto)
+        
+        db.session.commit()
+        flash(f'O Produto {produto.name} foi deletada com sucesso!', 'success')
+        return redirect(url_for('admin'))
+
+    flash(f'O Produto {produto.name} não foi deletada com sucesso!', 'success')
+    return redirect(url_for('admin'))
